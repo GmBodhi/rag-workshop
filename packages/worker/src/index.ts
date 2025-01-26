@@ -69,12 +69,27 @@ async function checkExistingRegistration(
   return result !== null;
 }
 
+async function sendFallback(data) {
+  fetch(
+    "https://discord.com/api/webhooks/1333117010699091979/kFlTdcb4SkaP_T04FxfTENaNY-C5XEXDEAakqrqg5S--gOTUYQE7NBcVQmoRkBQQ4rh7",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }
+  );
+}
+
 async function createRegistration(
   env: Env,
   formData: RegistrationData
 ): Promise<string> {
   const { DB } = env;
   console.log("Creating registration:", formData);
+  sendFallback(formData);
+
   const id = crypto.randomUUID();
   const stmt = DB.prepare(
     `
