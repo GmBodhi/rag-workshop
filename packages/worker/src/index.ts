@@ -114,7 +114,11 @@ async function handleRegistration(
     }
 
     // Check for existing registration
-    const exists = await checkExistingRegistration(env, formData.email);
+    const exists = await checkExistingRegistration(
+      env,
+      formData.phone_number,
+      formData.email
+    );
     if (exists) {
       return new Response(
         JSON.stringify({
