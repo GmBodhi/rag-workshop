@@ -32,7 +32,9 @@ const RegistrationForm = () => {
       .then((data) => {
         console.log("Response:", data);
         if (data.success) window.location.href = "/card/" + data.id;
-        else alert("Registration failed!");
+        else {
+          alert(data?.errors?.join?.(", ") || "Failed to submit registration");
+        }
       })
       .catch((err) => {
         console.error("Error:", err);

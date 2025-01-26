@@ -56,13 +56,14 @@ async function validateFormData(formData: RegistrationData): Promise<string[]> {
 
 async function checkExistingRegistration(
   env: Env,
-  phone: string
+  phone: string,
+  email: string
 ): Promise<boolean> {
   const { DB } = env;
   const result = await DB.prepare(
-    "SELECT phone_number FROM registrations WHERE phone_number = ?"
+    "SELECT phone_number FROM registrations WHERE phone_number = ? OR email = ?"
   )
-    .bind(phone)
+    .bind(phone, email)
     .first();
 
   return result !== null;
@@ -115,7 +116,19 @@ async function handleRegistration(
     // Check for existing registration
     const exists = await checkExistingRegistration(env, formData.email);
     if (exists) {
-      throw new ValidationError(["This email is already registered"]);
+      return new Response(
+        JSON.stringify({
+          success: false,
+          errors: ["Registration already exists with this email or phone"],
+        }),
+        {
+          status: 400,
+          headers: {
+            "Content-Type": "application/json",
+            ...corsHeaders,
+          },
+        }
+      );
     }
 
     // Create new registration
@@ -296,7 +309,7 @@ async function handleCardRequest(
   const { DB } = env;
   const result = await DB.prepare(`SELECT * FROM registrations WHERE id = ?`)
     .bind(id)
-    .run();
+    .first();
 
   if (!result) {
     return new Response(
