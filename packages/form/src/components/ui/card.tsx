@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 
 const Card = React.forwardRef(({ className, ...props }, ref) => (

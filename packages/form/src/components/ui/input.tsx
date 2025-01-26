@@ -1,3 +1,4 @@
+ "use client";
 import * as React from "react";
 
 const Input = React.forwardRef(({ className, type, ...props }, ref) => {

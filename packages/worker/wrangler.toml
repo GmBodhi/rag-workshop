@@ -1,0 +1,12 @@
+name = "rag-workshop-registration"
+main = "src/index.ts"
+compatibility_date = "2024-01-01"
+
+[observability.logs]
+enabled = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "workshop_registrations"
+database_id = "7e13247a-4a9a-46cf-b757-dcf0ac2764f3"
+preview_database_id = "c7dafac8-759a-4d31-978c-d06f2e0c025e"

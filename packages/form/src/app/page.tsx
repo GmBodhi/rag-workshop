@@ -2,22 +2,48 @@
 import { Database, Bot, Sparkles } from "lucide-react";
 import React, { useState } from "react";
 
+const api = "https://rag-workshop-registration.exstd.workers.dev/";
+
 const RegistrationForm = () => {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     semester: "",
     branch: "",
+    phone_number: "",
     college: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleSubmit = (e) => {
+    setLoading(true);
     e.preventDefault();
     console.log("Form submitted:", formData);
+
+    fetch(api, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log("Response:", data);
+        if (data.success) window.location.href = "/card/" + data.id;
+        else alert("Registration failed!");
+      })
+      .catch((err) => {
+        console.error("Error:", err);
+        alert("Registration failed!");
+      })
+      .finally(() => setLoading(false));
+    setLoading(false);
   };
 
   return (
-    <div className="min-h-screen bg-black p-4 flex items-center justify-center">
+    <div className="min-h-screen bg-slate-950 p-4 flex items-center justify-center">
       {/* Main Container */}
       <div className="w-full max-w-md space-y-8">
         {/* Header */}
@@ -46,6 +72,7 @@ const RegistrationForm = () => {
               <input
                 type="text"
                 required
+                value={formData.fullName}
                 className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder:text-gray-500 focus:ring-2 focus:ring-purple-400/50 focus:border-transparent transition duration-200"
                 placeholder="Enter your full name"
                 onChange={(e) =>
@@ -62,10 +89,28 @@ const RegistrationForm = () => {
               <input
                 type="email"
                 required
+                value={formData.email}
                 className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder:text-gray-500 focus:ring-2 focus:ring-purple-400/50 focus:border-transparent transition duration-200"
                 placeholder="your.email@example.com"
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
+                }
+              />
+            </div>
+
+            {/* Phone Number */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium bg-gradient-to-r from-purple-400 to-yellow-400 bg-clip-text text-transparent">
+                Phone Number
+              </label>
+              <input
+                type="tel"
+                required
+                value={formData.phone_number}
+                className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder:text-gray-500 focus:ring-2 focus:ring-purple-400/50 focus:border-transparent transition duration-200"
+                placeholder="Enter your phone number"
+                onChange={(e) =>
+                  setFormData({ ...formData, phone_number: e.target.value })
                 }
               />
             </div>
@@ -77,6 +122,7 @@ const RegistrationForm = () => {
               </label>
               <select
                 required
+                value={formData.semester}
                 className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder:text-gray-500 focus:ring-2 focus:ring-purple-400/50 focus:border-transparent transition duration-200"
                 onChange={(e) =>
                   setFormData({ ...formData, semester: e.target.value })
@@ -105,6 +151,7 @@ const RegistrationForm = () => {
               <input
                 type="text"
                 required
+                value={formData.branch}
                 className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder:text-gray-500 focus:ring-2 focus:ring-purple-400/50 focus:border-transparent transition duration-200"
                 placeholder="Enter your branch"
                 onChange={(e) =>
@@ -121,6 +168,7 @@ const RegistrationForm = () => {
               <input
                 type="text"
                 required
+                value={formData.college}
                 className="w-full bg-gray-800/50 border border-gray-700 rounded-lg px-4 py-2.5 text-white placeholder:text-gray-500 focus:ring-2 focus:ring-purple-400/50 focus:border-transparent transition duration-200"
                 placeholder="Enter your college name"
                 onChange={(e) =>
@@ -132,6 +180,7 @@ const RegistrationForm = () => {
             {/* Submit Button */}
             <button
               type="submit"
+              disabled={loading}
               className="w-full mt-6 bg-gradient-to-r from-blue-500 via-purple-500 to-yellow-500 text-white font-medium py-3 px-4 rounded-lg hover:opacity-90 transition duration-200 focus:ring-2 focus:ring-purple-400/50"
             >
               Register Now

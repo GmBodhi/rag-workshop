@@ -1,0 +1,12 @@
+{
+  "name": "rag-workshop",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/GmBodhi/rag-workshop.git",
+  "author": "Gautam <zakuzzdj@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ]
+}
