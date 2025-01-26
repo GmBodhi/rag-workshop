@@ -16,10 +16,28 @@ const RegistrationForm = () => {
 
   const [loading, setLoading] = useState(false);
 
+  const validateForm = (formData) => {
+    if (!formData.fullName) return "Full name is required";
+    if (!formData.email) return "Email is required";
+    if (!formData.phone_number || formData.phone_number.length !== 10)
+      return "Phone number is required and should be 10 digits";
+    if (!formData.semester) return "Semester is required";
+    if (!formData.branch) return "Branch is required";
+    if (!formData.college) return "College is required";
+    return null;
+  };
+
   const handleSubmit = (e) => {
     setLoading(true);
     e.preventDefault();
     console.log("Form submitted:", formData);
+
+    const v = validateForm(formData);
+    if (v) {
+      alert(v);
+      setLoading(false);
+      return;
+    }
 
     fetch(api, {
       method: "POST",
