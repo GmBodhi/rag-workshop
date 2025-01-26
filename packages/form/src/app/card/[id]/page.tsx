@@ -1,12 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {
-  Ticket,
-  Sparkles,
-  ArrowBigRightDash,
-  ArrowUpRightFromCircle,
-  ArrowUpRight,
-} from "lucide-react";
+import { Ticket } from "lucide-react";
 import { useParams } from "next/navigation";
 import CommunityDialog from "./dialog";
 
@@ -43,6 +37,7 @@ const ModernTicket = () => {
         window.location.href = "/";
       }
     })();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
