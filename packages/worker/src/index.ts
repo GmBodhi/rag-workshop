@@ -174,7 +174,7 @@ function convertToCSV(data: RegistrationData[]): string {
   const rows = data.map((record) =>
     [
       record.id,
-      record.fullName,
+      record.full_name,
       record.email,
       record.semester,
       record.phone_number,
