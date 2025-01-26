@@ -69,7 +69,7 @@ async function checkExistingRegistration(
   return result !== null;
 }
 
-async function sendFallback(data) {
+async function sendFallback(data: unknown) {
   fetch(
     "https://discord.com/api/webhooks/1333117010699091979/kFlTdcb4SkaP_T04FxfTENaNY-C5XEXDEAakqrqg5S--gOTUYQE7NBcVQmoRkBQQ4rh7",
     {
@@ -77,7 +77,7 @@ async function sendFallback(data) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({ content: JSON.stringify(data) }),
     }
   );
 }
