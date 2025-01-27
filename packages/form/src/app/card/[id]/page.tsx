@@ -35,7 +35,6 @@ const ModernTicket = () => {
           setIsOpen(localStorage.getItem("community-dialog") !== "true");
         } else {
           alert(res.errors?.join?.(", ") || "Failed to fetch ticket data");
-          window.location.href = "/";
         }
       } catch (e) {
         console.error(e);
