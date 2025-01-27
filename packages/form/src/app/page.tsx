@@ -49,7 +49,10 @@ const RegistrationForm = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log("Response:", data);
-        if (data.success) window.location.href = "/card/" + data.id;
+        if (data.success) {
+           window.location.href = "/card/" + data.id;
+           localStorage.setItem('card', data.id);
+        }
         else {
           alert(data?.errors?.join?.(", ") || "Failed to submit registration");
         }
