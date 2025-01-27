@@ -1,12 +1,9 @@
 "use client";
 import { Database, Bot, Sparkles } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const api = "https://rag-workshop-registration.exstd.workers.dev/";
 
-const cardId = localStorage.getItem('card');
-
-if (cardId) window.location.href = '/card/' + cardId;
 
 const RegistrationForm = () => {
   const [formData, setFormData] = useState({
@@ -19,6 +16,11 @@ const RegistrationForm = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  useEffect(()=>{
+    const cardId = localStorage.getItem('card');
+
+    if (cardId) window.location.href = '/card/' + cardId;
+  }, []);
 
   const validateForm = (formData) => {
     if (!formData.fullName) return "Full name is required";
