@@ -82,7 +82,7 @@ async function checkExistingRegistration(
 
 async function sendFallback(data: unknown, env: Env) {
   fetch(
-    env.vars.WEBHOOK,
+    env.WEBHOOK,
     {
       method: "POST",
       headers: {

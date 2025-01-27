@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 
 const api = "https://rag-workshop-registration.exstd.workers.dev/";
 
-
 const RegistrationForm = () => {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -16,10 +15,11 @@ const RegistrationForm = () => {
   });
 
   const [loading, setLoading] = useState(false);
-  useEffect(()=>{
-    const cardId = localStorage.getItem('card');
 
-    if (cardId) window.location.href = '/card/' + cardId;
+  useEffect(() => {
+    const cardId = localStorage.getItem("card");
+
+    if (cardId) window.location.href = "/card/" + cardId;
   }, []);
 
   const validateForm = (formData) => {
@@ -34,6 +34,8 @@ const RegistrationForm = () => {
   };
 
   const handleSubmit = (e) => {
+    if (loading) return;
+
     setLoading(true);
     e.preventDefault();
     console.log("Form submitted:", formData);
@@ -56,14 +58,13 @@ const RegistrationForm = () => {
       .then((data) => {
         console.log("Response:", data);
         if (data.success) {
-           window.location.href = "/card/" + data.id;
-           localStorage.setItem('card', data.id);
-        }
-        else {
+          window.location.href = "/card/" + data.id;
+          localStorage.setItem("card", data.id);
+        } else {
           alert(data?.errors?.join?.(", ") || "Failed to submit registration");
           if (data.id && data.id.length > 0) {
             window.location.href = "/card/" + data.id;
-            localStorage.setItem('card', data.id);
+            localStorage.setItem("card", data.id);
           }
         }
       })
@@ -214,9 +215,9 @@ const RegistrationForm = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full mt-6 bg-gradient-to-r from-blue-500 via-purple-500 to-yellow-500 text-white font-medium py-3 px-4 rounded-lg hover:opacity-90 transition duration-200 focus:ring-2 focus:ring-purple-400/50"
+              className={`w-full mt-6 bg-gradient-to-r from-blue-500 via-purple-500 to-yellow-500 text-white font-medium py-3 px-4 rounded-lg hover:opacity-90 transition duration-200 focus:ring-2 focus:ring-purple-400/50 disabled:opacity-50`}
             >
-              Register Now
+              {loading ? "Loading..." : "Register Now"}
             </button>
           </form>
         </div>
