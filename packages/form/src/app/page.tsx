@@ -15,6 +15,9 @@ const RegistrationForm = () => {
   });
 
   const [loading, setLoading] = useState(false);
+const cardId = localStorage.getItem('card');
+
+if (cardId) window.location.href = '/card/' + cardId;
 
   const validateForm = (formData) => {
     if (!formData.fullName) return "Full name is required";
