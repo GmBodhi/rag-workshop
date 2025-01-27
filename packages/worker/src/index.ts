@@ -58,20 +58,31 @@ async function checkExistingRegistration(
   env: Env,
   phone: string,
   email: string
-): Promise<boolean> {
+): Promise<string | null> {
   const { DB } = env;
-  const result = await DB.prepare(
-    "SELECT phone_number FROM registrations WHERE phone_number = ? OR email = ?"
+
+  const phoneResult = await DB.prepare(
+    "SELECT id FROM registrations WHERE phone_number = ?"
   )
-    .bind(phone, email)
+    .bind(phone)
     .first();
 
-  return result !== null;
+  if (phoneResult) {
+    return phoneResult.id as string;
+  }
+
+  const emailResult = await DB.prepare(
+    "SELECT id FROM registrations WHERE email = ?"
+  )
+    .bind(email)
+    .first();
+
+  return emailResult ? (emailResult.id as string) : null;
 }
 
-async function sendFallback(data: unknown) {
+async function sendFallback(data: unknown, env: Env) {
   fetch(
-    "https://discord.com/api/webhooks/1333117010699091979/kFlTdcb4SkaP_T04FxfTENaNY-C5XEXDEAakqrqg5S--gOTUYQE7NBcVQmoRkBQQ4rh7",
+    env.vars.WEBHOOK,
     {
       method: "POST",
       headers: {
@@ -88,7 +99,7 @@ async function createRegistration(
 ): Promise<string> {
   const { DB } = env;
   console.log("Creating registration:", formData);
-  sendFallback(formData);
+  sendFallback(formData, env);
 
   const id = crypto.randomUUID();
   const stmt = DB.prepare(
@@ -122,13 +133,11 @@ async function handleRegistration(
   try {
     const formData = (await request.json()) as RegistrationData;
 
-    // Validate form data
     const validationErrors = await validateFormData(formData);
     if (validationErrors.length > 0) {
       throw new ValidationError(validationErrors);
     }
 
-    // Check for existing registration
     const exists = await checkExistingRegistration(
       env,
       formData.phone_number,
@@ -139,6 +148,7 @@ async function handleRegistration(
         JSON.stringify({
           success: false,
           errors: ["Registration already exists with this email or phone"],
+          id: exists,
         }),
         {
           status: 400,
@@ -150,7 +160,6 @@ async function handleRegistration(
       );
     }
 
-    // Create new registration
     const data = await createRegistration(env, formData);
 
     const response: ApiResponse = {
@@ -190,7 +199,6 @@ async function handleRegistration(
 }
 
 function convertToCSV(data: RegistrationData[]): string {
-  // Define CSV headers
   const headers = [
     "ID",
     "Full Name",
@@ -202,7 +210,6 @@ function convertToCSV(data: RegistrationData[]): string {
     "Registration Date",
   ];
 
-  // Convert data to CSV rows
   const rows = data.map((record) =>
     [
       record.id,
@@ -213,7 +220,6 @@ function convertToCSV(data: RegistrationData[]): string {
       record.branch,
       record.college,
     ].map((field) => {
-      // Handle fields that might contain commas or quotes
       const stringField = String(field ?? "");
       if (
         stringField.includes(",") ||
@@ -226,7 +232,6 @@ function convertToCSV(data: RegistrationData[]): string {
     })
   );
 
-  // Combine headers and rows
   return [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
 }
 
@@ -239,7 +244,6 @@ async function handleExportRegistrations(
     const url = new URL(request.url);
     const search = url.searchParams.get("search") || "";
 
-    // Build query based on filters
     let query = `
       SELECT 
         id,
@@ -268,20 +272,16 @@ async function handleExportRegistrations(
 
     query += ` ORDER BY registration_date DESC`;
 
-    // Fetch all records
     const result = await DB.prepare(query)
       .bind(...params)
       .all();
     const registrations = result.results as RegistrationData[];
 
-    // Convert to CSV
     const csv = convertToCSV(registrations);
 
-    // Generate filename with current date
     const date = new Date().toISOString().split("T")[0];
     const filename = `registrations_${date}.csv`;
 
-    // Return CSV file
     return new Response(csv, {
       headers: {
         "Content-Type": "text/csv",

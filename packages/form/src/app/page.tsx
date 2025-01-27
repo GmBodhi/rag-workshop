@@ -61,6 +61,10 @@ const RegistrationForm = () => {
         }
         else {
           alert(data?.errors?.join?.(", ") || "Failed to submit registration");
+          if (data.id && data.id.length > 0) {
+            window.location.href = "/card/" + data.id;
+            localStorage.setItem('card', data.id);
+          }
         }
       })
       .catch((err) => {

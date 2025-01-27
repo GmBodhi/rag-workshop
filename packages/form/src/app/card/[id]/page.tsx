@@ -25,23 +25,24 @@ const ModernTicket = () => {
     semester: "s0",
   });
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch(api + id).then((res) => res.json());
-        console.log("Ticket data:", res);
-        if (res.email) {
-          set(res);
-          setIsOpen(localStorage.getItem("community-dialog") !== "true");
-        } else {
-          alert(res.errors?.join?.(", ") || "Failed to fetch ticket data");
-        }
-      } catch (e) {
-        console.error(e);
-        alert("Failed to fetch ticket data");
-        window.location.href = "/";
+  async function fetchURL() {
+    try {
+      const res = await fetch(api + id).then((res) => res.json());
+      console.log("Ticket data:", res);
+      if (res.email) {
+        set(res);
+        setIsOpen(localStorage.getItem("community-dialog") !== "true");
+      } else {
+        alert(res.errors?.join?.(", ") || "Failed to fetch ticket data");
       }
-    })();
+    } catch (e) {
+      console.error(e);
+      alert("Failed to fetch ticket data");
+    }
+  }
+
+  useEffect(() => {
+    fetchURL().catch(fetchURL);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

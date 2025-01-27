@@ -14,5 +14,6 @@ export interface ApiResponse {
 }
 
 export interface Env {
-    DB: D1Database;
+  DB: D1Database;
+  vars: Record<string, string>;
 }
