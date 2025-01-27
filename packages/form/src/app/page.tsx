@@ -4,6 +4,10 @@ import React, { useState } from "react";
 
 const api = "https://rag-workshop-registration.exstd.workers.dev/";
 
+const cardId = localStorage.getItem('card');
+
+if (cardId) window.location.href = '/card/' + cardId;
+
 const RegistrationForm = () => {
   const [formData, setFormData] = useState({
     fullName: "",
@@ -15,9 +19,6 @@ const RegistrationForm = () => {
   });
 
   const [loading, setLoading] = useState(false);
-const cardId = localStorage.getItem('card');
-
-if (cardId) window.location.href = '/card/' + cardId;
 
   const validateForm = (formData) => {
     if (!formData.fullName) return "Full name is required";
