@@ -82,7 +82,7 @@ const CommunityDialog = ({
               onClose();
               localStorage.setItem("community-dialog", "true");
             }}
-            className="w-full py-4 bg-red-600/80 rounded-xl hover:opacity-80 transition-colors"
+            className="w-full py-4 bg-gray-800/50 rounded-xl hover:bg-gray-800 transition-colors"
           >
             <p className="text-center text-white">
               Don&apos;t show this again
