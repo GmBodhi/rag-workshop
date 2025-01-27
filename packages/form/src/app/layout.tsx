@@ -17,6 +17,10 @@ export const metadata: Metadata = {
   description: "Register for the RAG Workshop",
 };
 
+const cardId = localStorage.getItem('card');
+
+if (cardId) window.location.href = '/card/' + cardId;
+
 export default function RootLayout({
   children,
 }: Readonly<{
