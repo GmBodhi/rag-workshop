@@ -219,6 +219,7 @@ const RegistrationForm = () => {
             >
               {loading ? "Loading..." : "Register Now"}
             </button>
+            <p className="w-full text-center text-white">Please contact: 9072767620 for support</p>
           </form>
         </div>
 

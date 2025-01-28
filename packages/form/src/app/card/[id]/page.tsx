@@ -176,6 +176,10 @@ const ModernTicket = () => {
             </p>
           </div>
 
+          <p className="w-full text-center text-white">
+            Please contact: 9072767620 for support
+          </p>
+
           {/* Workshop highlights */}
           <div className="mt-6 space-y-2">
             <div className="flex items-center space-x-2">
