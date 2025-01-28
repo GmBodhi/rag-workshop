@@ -32,7 +32,7 @@ const ModernTicket = () => {
       if (res.email) {
         set(res);
         setIsOpen(localStorage.getItem("community-dialog") !== "true");
-        localStorage.setItem("card", id);
+        localStorage.setItem("card", id as string);
       } else {
         alert(res.errors?.join?.(", ") || "Failed to fetch ticket data");
       }
