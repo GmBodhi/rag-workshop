@@ -219,7 +219,13 @@ const RegistrationForm = () => {
             >
               {loading ? "Loading..." : "Register Now"}
             </button>
-            <p className="w-full text-center text-white">Please contact: 9072767620 for support</p>
+            <p className="w-full text-center text-white">
+              Please contact:{" "}
+              <a href="https://wa.me/9072767620" target="_blank">
+                9072767620
+              </a>{" "}
+              for support
+            </p>
           </form>
         </div>
 

@@ -1,26 +1,19 @@
 "use client";
-import { Billboard, OrbitControls, Text } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
+
+import Slide1 from "@/components/slides/slide1";
+import SlideWrapper from "@/components/slideWrapper";
 
 export default function Home() {
   return (
     <>
       <div className="w-full h-screen">
-        <Canvas>
-          <ambientLight />
-          <pointLight position={[10, 10, 10]} />
-
-          <Billboard>
-            <mesh>
-              <meshBasicMaterial attach="material" color="white" />
-              <planeGeometry attach="geometry" args={[8, 6]} />
-            </mesh>
-            <Text color="black" position={[0, 1, 0]}>
-              asd
-            </Text>
-          </Billboard>
-          <OrbitControls />
-        </Canvas>
+        <SlideWrapper>
+          <Slide1 className="bg-white" />
+          <Slide1 className="bg-black" />
+          <Slide1 className="bg-blue-500" />
+          <Slide1 className="bg-yellow-500" />
+          <Slide1 className="bg-pink-500" />
+        </SlideWrapper>
       </div>
     </>
   );

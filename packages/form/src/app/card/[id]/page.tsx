@@ -177,7 +177,11 @@ const ModernTicket = () => {
           </div>
 
           <p className="w-full text-center text-white">
-            Please contact: 9072767620 for support
+            Please contact:{" "}
+            <a href="https://wa.me/9072767620" target="_blank">
+              9072767620
+            </a>{" "}
+            for support
           </p>
 
           {/* Workshop highlights */}
